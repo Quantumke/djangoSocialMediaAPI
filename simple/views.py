@@ -20,3 +20,13 @@ def login(request,provider_name):
     result= authomatic.login(DjangoAdapter(request, response),provider_name)
 if result:
     resonse.write('<a href="..">Home</a>')
+    #PROVIDES AN EXTENSION FOR ERROR REPORTING
+if result.error:
+    response.write('<h2>ERROR:{0}</h2>'.format(result.error.message))
+elif result.user:
+    if not(result.user.name and result.user.id):
+        result.user.update()
+        response.write(u'<h1>Hi{0}</h1>'.format(result.user.name))
+        response.writ(u'<h2>Your id is:{0}</h2>'.format(result.user.id))
+        response.write(u'<h2>YOur Email is:{0}</h2>'.format(reult.user.email))
+        #Next i access protected resources
